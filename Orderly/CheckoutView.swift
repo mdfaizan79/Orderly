@@ -13,8 +13,15 @@ struct CheckoutView: View {
     let paymentTypes = ["Cash", "Card","UPI"]
     
     @State private var paymentType = "Cash"
+    
+    @State private var addLoyalDetails = false
+    @State private var loyaltyNumber = ""
+    
+    let TipsAmount = [0,10,20,30,50]
+    @State private var TipAmount = 20
+    
     var body: some View {
-        VStack{
+        Form{
             Section{
                 Picker("How do you want to Pay ?" ,selection: $paymentType){
                     ForEach(paymentTypes,id: \.self){
@@ -22,7 +29,22 @@ struct CheckoutView: View {
                     }
                 }
                 
+                Toggle("Add Loyalty Card", isOn: $addLoyalDetails.animation())
+                if addLoyalDetails {
+                    TextField("Loyalty Card Number", text: $loyaltyNumber)
+                }
             }
+            
+            Section("Add a Tip ? "){
+                Picker("Percentage" , selection: $TipAmount){
+                    ForEach(TipsAmount, id: \.self){
+                        Text("\($0)%")
+                    }
+                }
+            }
+                .pickerStyle(.segmented)
+            
+            
         }
         .navigationTitle("Payment")
         .navigationBarTitleDisplayMode(.inline)
